@@ -23,10 +23,16 @@ max_excel_lines = int(parameters.get("output", {}).get("max_excel_lines", 65535)
 if not os.path.exists(output_path):
     os.makedirs(output_path)
 
-df_zaak_informatie = pd.read_csv(input_path+input_file, sep=";", quotechar='"' )
+df_zaak_informatie = pd.read_csv(input_path+input_file, sep=";", quotechar='"', dtype=str)
 print("Aantal ingelezen zaakregels:", str(len(df_zaak_informatie)))
 
-df_check_info = df_zaak_informatie[["ZAAKTYPE_NAAM", "SQUITXO_HOOFDZAAKNUMMER","EXTERN_ZAAKNUMMER","FULL_DOCUMENT_PATH"]].copy()
+df_check_info = df_zaak_informatie[["ZAAKTYPE_NAAM", "SQUITXO_HOOFDZAAKNUMMER","EXTERN_ZAAKNUMMER","FULL_DOCUMENT_PATH","SQUITXO_ZAAKNUMMER_AANGEPAST_B","SQUITXO_ZAAKNUMMER_AANGEPAST_B_PUNT","SQUITXO_ZAAKNUMMER_AANGEPAST_S"]].copy()
+df_check_info.rename(columns=
+    {"SQUITXO_ZAAKNUMMER_AANGEPAST_B": "VARIANT1_B",
+     "SQUITXO_ZAAKNUMMER_AANGEPAST_B_PUNT": "VARIANT2_Bpunt",
+     "SQUITXO_ZAAKNUMMER_AANGEPAST_S": "VARIANT3_S"},
+     inplace=True)
+
 df_check_info.reset_index(drop=True, inplace=True)
 df_check_info["FILE_FOUND"]="NEE"
 df_check_info["OUTPUT_PATH"] = ""
@@ -47,7 +53,8 @@ for index, row in df_check_info.iterrows():
         filename_to_copy = os.path.split(row["FULL_DOCUMENT_PATH"])[1]  # get the tail part
         df_check_info.at[index, "OUPTUT_file"] = filename_to_copy
         source_path = row["FULL_DOCUMENT_PATH"]
-        destination_path = output_path+filename_to_copy
+        zaaknummer = row["SQUITXO_HOOFDZAAKNUMMER"]
+        destination_path = output_path+zaaknummer+"/"+filename_to_copy
         
         try:
             shutil.copyfile(source_path, destination_path)
