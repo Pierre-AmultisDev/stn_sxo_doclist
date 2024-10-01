@@ -1,0 +1,44 @@
+# This workflow will publish the latesy draft release or a tagged versioninstall Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+name: TST Publish Draft Release Windows
+
+on:
+  # input in actions tab  
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Enter the tag name of the draft release to be published'
+        required: false
+
+jobs:
+  # every job is run on its own server
+  publish_draft_release:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Get Latest Draft Release
+      id: get_latest_draft_release
+      run: |
+        $LATEST_DRAFT_RELEASE=(Invoke-RestMethod -Uri "https://api.github.com/repos/${env:GITHUB_REPOSITORY}/releases" -Headers @{"Authorization"="token ${env:GITHUB_TOKEN}"} | Where-Object { $_.draft -eq $true } | Select-Object -First 1).tag_name
+        echo "::set-output name=latest_draft_release::$LATEST_DRAFT_RELEASE"
+        
+    - name: Publish Draft Release
+      id: publish_draft_release
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const tag = "${{ github.event.inputs.release_tag }}" || "${{ steps.get_latest_draft_release.outputs.latest_draft_release }}";
+          const { data: release } = await github.repos.getReleaseByTag({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            tag: tag
+          });
+
+          await github.repos.updateRelease({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            release_id: release.id,
+            tag_name: release.tag_name,
+            draft: false
+          });

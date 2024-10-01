@@ -1,0 +1,51 @@
+# =============================================================================
+#
+# @package    stn_sxo_uitzetten
+# @container  stn_sxo_uitzetten
+# @name       .gitignore
+# @purpose    files and folders to ignore by git
+# @version    v0.0.2  2024-06-04
+# @author     pierre@amultis.dev
+# @copyright  (C) 2020-2024 Pierre Veelen
+#
+# =============================================================================
+
+# GENERIC
+# ====================
+# all kind of folders
+history
+historie
+old
+examples
+secret
+geheim
+secure
+
+# files
+TODO*
+ToDo*
+TO_DO*
+To_Do*
+UUID*
+
+# IDE 
+# ====================
+.vscode
+.idea
+
+# Python 
+# ====================
+__pycache__
+
+# BUILD
+# ====================
+/dist
+/build
+
+# APPLICATION SPECIFIC
+# ====================
+/output*
+/input
+/log
+*_connections.json
+*_parameters.json

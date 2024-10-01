@@ -1,0 +1,72 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: TST Build Python application
+
+# Events that trigger this workflow
+on:
+  workflow_dispatch:
+#  push:
+#    branches: [ "master" ]
+#  pull_request:
+#    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  # every job is run on its own server
+  build-app:
+
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      # https://github.com/actions/checkout
+      # use the standard checkout mechanism on github
+      uses: actions/checkout@v4
+    
+    - name: Set up Python 3.10
+      # https://github.com/actions/setup-python
+      # uses the latest setup-version on github
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.10"
+
+    - name: Install pip and requirements for the app
+      run: |
+        python -m pip install --upgrade pip
+        if ( Test-Path -path requirements.txt -PathType Leaf) {
+          pip install -r requirements.txt
+        }
+        
+    - name: Install dependencies
+      run: |
+        pip install flake8 pyinstaller
+
+    - name: Lint with flake8
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+    - name: Build executable
+      run: |
+        if ( Test-Path -path run_queries_oracle.spec -PathType Leaf) {
+          pyinstaller --clean run_queries_oracle.spec
+        } else {
+          pyinstaller --clean --onefile run_queries_oracle.py
+        }
+
+    - name: Echo info
+      run: |
+        dir env:
+        dir ${{ github.action_path }}
+        dir ${{ github.workspace }}
+        
+    - name: Upload Executable
+      uses: actions/upload-artifact@v4
+      with:
+        name: run_queries_oracle.exe
+        path: dist/run_queries_oracle.exe

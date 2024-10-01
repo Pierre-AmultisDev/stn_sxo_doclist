@@ -1,0 +1,20 @@
+{
+  "generic_info": {
+    "environment": "vbox_prod",
+    "version": "v001",
+    "date": "20241001"
+  },
+  "filepaths": {
+    "inputfolder": "./input/stnap004/tst/",
+	  "inputfile": "retrieve_all_documentinfo_gefilterd_BCT_tst.csv",
+	  "outputfolder": "./output/tst/",
+    "errorlogfile": "err_log",
+    "querylogfile": "qry_log",
+    "actionlogfile": "act_log"
+    },
+  "output": {
+    "output_to_excel" : "True",
+    "max_excel_lines" : 1048576,
+    "verbose": 0
+  }
+}

@@ -1,0 +1,44 @@
+# This workflow will publish the latest draft release or a tagged version
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+name: TST Publish Draft Release Ubuntu
+
+on:
+  # input in actions tab  
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Enter the tag name of the draft release to be published'
+        required: false
+
+jobs:
+  # every job is run on its own server
+  publish_draft_release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Get Latest Draft Release
+      id: get_latest_draft_release
+      run: |
+        LATEST_DRAFT_RELEASE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/${GITHUB_REPOSITORY}/releases | jq -r '.[] | select(.draft == true) | .tag_name' | head -n 1)
+        echo "LATEST_DRAFT_RELEASE=$LATEST_DRAFT_RELEASE" >> $GITHUB_ENV
+        
+    - name: Publish Draft Release
+      id: publish_draft_release
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const tag = "${{ github.event.inputs.release_tag }}" || process.env.LATEST_DRAFT_RELEASE;
+          const { data: release } = await github.repos.getReleaseByTag({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            tag: tag
+          });
+
+          await github.repos.updateRelease({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            release_id: release.id,
+            tag_name: release.tag_name,
+            draft: false
+          });

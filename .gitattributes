@@ -1,0 +1,16 @@
+# =============================================================================
+#
+# @package    stn_sxo_uitzetten
+# @container  stn_sxo_uitzetten
+# @name       .gitattibutes
+# @purpose    Set behavior for git
+# @version    v0.0.1  2022-04-29
+# @author     pierre@amultis.dev
+# @copyright  (C) 2020-2024 Pierre Veelen
+#
+# =============================================================================
+
+*      text=auto
+*.sh   text eol=lf
+*.cmd  text eol=crlf
+*.json text eol=crlf
