@@ -69,5 +69,5 @@ print("Aantal op te slaan zaakregels:", str(len(df_check_info)))
 print("Waarvan gelukte documenten   :", str(aantal_gelukt)) 
 
 df_check_info.to_csv(output_path+"df_check_info.csv", index=False, sep=";", quotechar='"', quoting=QUOTE_ALL)       
-if len(df_check_info) <= max_excel_lines and export_to_excel.lower()) =="true":
+if len(df_check_info) <= max_excel_lines and export_to_excel.lower() =="true":
     df_check_info.to_excel(output_path+"df_check_info.xlsx", index=False)
