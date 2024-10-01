@@ -46,7 +46,7 @@ for index, row in df_check_info.iterrows():
     if os.path.isfile(row["FULL_DOCUMENT_PATH"]):
         df_check_info.at[index, "FILE_FOUND"] = "JA"
         # print(os.path.split(row["FULL_DOCUMENT_PATH"]))
-        df_check_info.at[index, "OUPTUT_PATH"] = output_path
+        df_check_info.at[index, "OUPTUT_PATH"] = output_path+zaaknummer+"/"
         filename_to_copy = os.path.split(row["FULL_DOCUMENT_PATH"])[1]  # get the tail part
         df_check_info.at[index, "OUPTUT_file"] = filename_to_copy
         source_path = row["FULL_DOCUMENT_PATH"]
