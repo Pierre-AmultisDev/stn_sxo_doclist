@@ -45,15 +45,16 @@ for index, row in df_check_info.iterrows():
     
     if os.path.isfile(row["FULL_DOCUMENT_PATH"]):
         df_check_info.at[index, "FILE_FOUND"] = "JA"
+        zaaknummer = row["SQUITXO_HOOFDZAAKNUMMER"]
         # print(os.path.split(row["FULL_DOCUMENT_PATH"]))
         df_check_info.at[index, "OUPTUT_PATH"] = output_path+zaaknummer+"/"
         filename_to_copy = os.path.split(row["FULL_DOCUMENT_PATH"])[1]  # get the tail part
         df_check_info.at[index, "OUPTUT_file"] = filename_to_copy
+        
         source_path = row["FULL_DOCUMENT_PATH"]
-        zaaknummer = row["SQUITXO_HOOFDZAAKNUMMER"]
+        destination_path = output_path+zaaknummer+"/"+filename_to_copy
         if not os.path.exists(output_path+zaaknummer+"/"):
             os.makedirs(output_path+zaaknummer+"/")
-        destination_path = output_path+zaaknummer+"/"+filename_to_copy
 
         try:
             shutil.copyfile(source_path, destination_path)
