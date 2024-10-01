@@ -19,6 +19,7 @@ output_path = parameters.get("filepaths", {}).get("outputfolder", "./output/")
 
 # if no value is given assumes Excel 97-2003 workbook size
 max_excel_lines = int(parameters.get("output", {}).get("max_excel_lines", 65535))
+export_to_excel = parameters.get("output", {}).get("output_to_excel", "True")
 
 df_zaak_informatie = pd.read_csv(input_path+input_file, sep=";", quotechar='"', dtype=str)
 print("Aantal ingelezen zaakregels:", str(len(df_zaak_informatie)))
@@ -68,4 +69,5 @@ print("Aantal op te slaan zaakregels:", str(len(df_check_info)))
 print("Waarvan gelukte documenten   :", str(aantal_gelukt)) 
 
 df_check_info.to_csv(output_path+"df_check_info.csv", index=False, sep=";", quotechar='"', quoting=QUOTE_ALL)       
-df_check_info.to_excel(output_path+"df_check_info.xlsx", index=False)
+if len(df_check_info) <= max_excel_lines and export_to_excel.lower()) =="true":
+    df_check_info.to_excel(output_path+"df_check_info.xlsx", index=False)
