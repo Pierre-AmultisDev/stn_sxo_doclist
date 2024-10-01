@@ -2,7 +2,7 @@
 # And will add the required content to that release
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
-name: QRY Create Draft Release with Content Combi
+name: DOC Create Draft Release with Content Combi
 
 on:
 # Events that trigger this workflow
@@ -187,11 +187,7 @@ jobs:
         cp ./dist/${{ env.AMUDEV_PYTHON_APP }}.exe ./${{ env.AMUDEV_PYTHON_APP }}_${{ env.NEW_VERSION }}.exe
         
         cp ${GITHUB_WORKSPACE}/${{ env.AMUDEV_PREFIX_REQ }}parameters-template.json ./dist/       
-        cp ${GITHUB_WORKSPACE}/${{ env.AMUDEV_PREFIX_REQ }}connections-template.json ./dist/
         
-        mkdir -p ./dist/sqlplus/retrieve_data/
-        cp ${GITHUB_WORKSPACE}/sqlplus/retrieve_data/*.sql ./dist/sqlplus/retrieve_data/
-
     - name: Create zip file
       run: |
         cd ./dist/
