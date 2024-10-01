@@ -20,9 +20,6 @@ output_path = parameters.get("filepaths", {}).get("outputfolder", "./output/")
 # if no value is given assumes Excel 97-2003 workbook size
 max_excel_lines = int(parameters.get("output", {}).get("max_excel_lines", 65535))
 
-if not os.path.exists(output_path):
-    os.makedirs(output_path)
-
 df_zaak_informatie = pd.read_csv(input_path+input_file, sep=";", quotechar='"', dtype=str)
 print("Aantal ingelezen zaakregels:", str(len(df_zaak_informatie)))
 
@@ -54,8 +51,10 @@ for index, row in df_check_info.iterrows():
         df_check_info.at[index, "OUPTUT_file"] = filename_to_copy
         source_path = row["FULL_DOCUMENT_PATH"]
         zaaknummer = row["SQUITXO_HOOFDZAAKNUMMER"]
+        if not os.path.exists(output_path+zaaknummer+"/"):
+            os.makedirs(output_path+zaaknummer+"/")
         destination_path = output_path+zaaknummer+"/"+filename_to_copy
-        
+
         try:
             shutil.copyfile(source_path, destination_path)
             df_check_info.at[index, "COULD_COPY_FILE"] = "JA"
