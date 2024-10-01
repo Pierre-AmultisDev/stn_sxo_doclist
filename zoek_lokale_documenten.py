@@ -19,6 +19,7 @@ output_path = parameters.get("filepaths", {}).get("outputfolder", "./output/")
 
 # if no value is given assumes Excel 97-2003 workbook size
 max_excel_lines = int(parameters.get("output", {}).get("max_excel_lines", 65535))
+export_to_excel = parameters.get("output", {}).get("output_to_excel", "True")
 
 df_zaak_informatie = pd.read_csv(input_path+input_file, sep=";", quotechar='"', dtype=str)
 print("Aantal ingelezen zaakregels:", str(len(df_zaak_informatie)))
@@ -47,9 +48,9 @@ for index, row in df_check_info.iterrows():
         df_check_info.at[index, "FILE_FOUND"] = "JA"
         zaaknummer = row["SQUITXO_HOOFDZAAKNUMMER"]
         # print(os.path.split(row["FULL_DOCUMENT_PATH"]))
-        df_check_info.at[index, "OUPTUT_PATH"] = output_path+zaaknummer+"/"
+        df_check_info.at[index, "OUTPUT_PATH"] = output_path+zaaknummer+"/"
         filename_to_copy = os.path.split(row["FULL_DOCUMENT_PATH"])[1]  # get the tail part
-        df_check_info.at[index, "OUPTUT_file"] = filename_to_copy
+        df_check_info.at[index, "OUTPUT_FILE"] = filename_to_copy
         
         source_path = row["FULL_DOCUMENT_PATH"]
         destination_path = output_path+zaaknummer+"/"+filename_to_copy
@@ -68,5 +69,5 @@ print("Aantal op te slaan zaakregels:", str(len(df_check_info)))
 print("Waarvan gelukte documenten   :", str(aantal_gelukt)) 
 
 df_check_info.to_csv(output_path+"df_check_info.csv", index=False, sep=";", quotechar='"', quoting=QUOTE_ALL)       
-df_check_info.to_excel(output_path+"df_check_info.xlsx", index=False)
-    
+if len(df_check_info) <= max_excel_lines and export_to_excel.lower() =="true":
+    df_check_info.to_excel(output_path+"df_check_info.xlsx", index=False)
