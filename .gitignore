@@ -1,10 +1,10 @@
 # =============================================================================
 #
 # @package    stn_sxo_uitzetten
-# @container  stn_sxo_uitzetten
+# @container  zoek_lokale_documenten
 # @name       .gitignore
 # @purpose    files and folders to ignore by git
-# @version    v0.0.2  2024-06-04
+# @version    v0.0.2  2024-10-01
 # @author     pierre@amultis.dev
 # @copyright  (C) 2020-2024 Pierre Veelen
 #
@@ -49,3 +49,5 @@ __pycache__
 /log
 *_connections.json
 *_parameters.json
+*_parameters_*.json
+
