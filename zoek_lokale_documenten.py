@@ -49,7 +49,7 @@ for index, row in df_check_info.iterrows():
         # print(os.path.split(row["FULL_DOCUMENT_PATH"]))
         df_check_info.at[index, "OUTPUT_PATH"] = output_path+zaaknummer+"/"
         filename_to_copy = os.path.split(row["FULL_DOCUMENT_PATH"])[1]  # get the tail part
-        df_check_info.at[index, "OUTPUT_file"] = filename_to_copy
+        df_check_info.at[index, "OUTPUT_FILE"] = filename_to_copy
         
         source_path = row["FULL_DOCUMENT_PATH"]
         destination_path = output_path+zaaknummer+"/"+filename_to_copy
