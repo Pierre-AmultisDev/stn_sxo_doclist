@@ -65,6 +65,9 @@ for index, row in df_check_info.iterrows():
         except Exception as error:
             print(error)
 
+# verwijder de regel als file niet gevonden is
+df_check_info.drop(~df_check_info.loc[df_check_info["FULL_DOCUMENT_PATH"] == "FILE_FOUND"].index, inplace=True)
+
 print("Aantal op te slaan zaakregels:", str(len(df_check_info)))  
 print("Waarvan gelukte documenten   :", str(aantal_gelukt)) 
 
