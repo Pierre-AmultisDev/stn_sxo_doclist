@@ -24,7 +24,8 @@ export_to_excel = parameters.get("output", {}).get("output_to_excel", "True")
 df_zaak_informatie = pd.read_csv(input_path+input_file, sep=";", quotechar='"', dtype=str)
 print("Aantal ingelezen zaakregels:", str(len(df_zaak_informatie)))
 
-df_check_info = df_zaak_informatie[["DOSSIERCODE","ZAAKTYPE_NAAM", "SQUITXO_HOOFDZAAKNUMMER","EXTERN_ZAAKNUMMER","FULL_DOCUMENT_PATH","SQUITXO_ZAAKNUMMER_AANGEPAST_B","SQUITXO_ZAAKNUMMER_AANGEPAST_B_PUNT","SQUITXO_ZAAKNUMMER_AANGEPAST_S"]].copy()
+df_check_info = df_zaak_informatie[["DOSSIERCODE","ZAAKTYPE_NAAM", "SQUITXO_HOOFDZAAKNUMMER","EXTERN_ZAAKNUMMER","FULL_DOCUMENT_PATH","SQUITXO_ZAAKNUMMER_AANGEPAST_B","SQUITXO_ZAAKNUMMER_AANGEPAST_B_PUNT","SQUITXO_ZAAKNUMMER_AANGEPAST_S",
+                                    "EXTERN_ZAAKNUMMER", "OMSCHRIJVING", "GLOBALE_LOKATIE", "DOCUMENTTITEL", "DOCUMENTTYPE", "DATUMDOCUMENT", "AUTEUR" ]].copy()
 df_check_info.rename(columns=
     {"SQUITXO_ZAAKNUMMER_AANGEPAST_B": "VARIANT1_B",
      "SQUITXO_ZAAKNUMMER_AANGEPAST_B_PUNT": "VARIANT2_Bpunt",
